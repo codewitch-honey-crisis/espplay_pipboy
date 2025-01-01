@@ -16,6 +16,9 @@ using image_t = uix::image_box<screen_t::control_surface_type>;
 using label_t = uix::label<screen_t::control_surface_type>;
 using painter_t = uix::painter<screen_t::control_surface_type>;
 
+static screen_t::pixel_type vdark_green(0,23,0);
+static screen_t::pixel_type vgreen(0,63,0);
+static rgba_pixel<32> uix_vgreen(0,255,0,255);
 static const_buffer_stream title_stream(fallout_boy_jpg,sizeof(fallout_boy_jpg));
 static jpg_image title_jpg(title_stream);
 
@@ -162,7 +165,7 @@ static void sub_menu_painter_on_paint(painter_t::control_surface_type& destinati
         ti.text_sz(temp);
         ti.text_font->measure(-1,ti,&tsz);
         ti.text_sz(first_txt);
-        draw::text(destination,((srect16)tsz.bounds()).offset(x-tsz.width,0),ti,color_t::dark_green);
+        draw::text(destination,((srect16)tsz.bounds()).offset(x-tsz.width,0),ti,vdark_green);
     }
     temp[0]=0;
     const char* txt = pip_sub_menus[top_menu_index][sub_menu_index];
@@ -171,7 +174,7 @@ static void sub_menu_painter_on_paint(painter_t::control_surface_type& destinati
     ti.text_sz(temp);
     ti.text_font->measure(-1,ti,&tsz);
     ti.text_sz(txt);
-    draw::text(destination,srect16(x,0,x+tsz.width,tsz.height-1),ti,color_t::green);
+    draw::text(destination,srect16(x,0,x+tsz.width,tsz.height-1),ti,vgreen);
     //if(sub_menu_index<pip_sub_menu_sizes[top_menu_index]-1) {
     int c = 0;
     for(int i = sub_menu_index+1;i<pip_sub_menu_sizes[top_menu_index];++i) {
@@ -189,7 +192,7 @@ static void sub_menu_painter_on_paint(painter_t::control_surface_type& destinati
         ti.text_sz(temp);
         ti.text_font->measure(-1,ti,&tsz);
         ti.text_sz(last_txt);
-        draw::text(destination,srect16(x,0,x+tsz.width,tsz.height-1),ti,color_t::dark_green);
+        draw::text(destination,srect16(x,0,x+tsz.width,tsz.height-1),ti,vdark_green);
         ++c;
     }
 }
@@ -198,15 +201,15 @@ static void top_menu_painter_on_paint(painter_t::control_surface_type& destinati
     const size_t index = top_menu_index;
     srect16 sr=(srect16)destination.bounds();
     int16_t y = sr.y1+sr.height()*.6667f;
-    draw::line(destination,srect16(0,y,sr.x2,y),color_t::green);
+    draw::line(destination,srect16(0,y,sr.x2,y),vgreen);
     int16_t xs = pip_top_label_starts[index]-3;
     int16_t xe = pip_top_label_ends[index]+3;
     draw::line(destination,srect16(xs,y,xe,y),color_t::black);
     
-    draw::line(destination,srect16(xs,0,xs,y),color_t::green);
-    draw::line(destination,srect16(xs,0,xs+3,0),color_t::green);
-    draw::line(destination,srect16(xe,0,xe,y),color_t::green);
-    draw::line(destination,srect16(xe,0,xe-3,0),color_t::green);
+    draw::line(destination,srect16(xs,0,xs,y),vgreen);
+    draw::line(destination,srect16(xs,0,xs+3,0),vgreen);
+    draw::line(destination,srect16(xe,0,xe,y),vgreen);
+    draw::line(destination,srect16(xe,0,xe-3,0),vgreen);
 }
 
 void ui_title_screen(uix::display& disp) {
@@ -349,7 +352,7 @@ void ui_pip_screen(uix::display& disp) {
         lab.padding({0,0});
         lab.text_justify(uix::uix_justify::top_left);
         lab.text(pip_top_captions[i]);
-        lab.color(uix_color_t::green);
+        lab.color(uix_vgreen);
         pip_screen.register_control(lab);
     }
     srect16 subrect(0,0,LCD_WIDTH-1,pip_top_font.line_height()-1);
