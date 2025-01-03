@@ -285,12 +285,7 @@ static void pip_set_top_menu_index(size_t index) {
     pip_set_sub_menu_index(pip_sub_menu_indices[top_menu_index]);
     
 }
-void ui_pip_update() {
-    button_l_raw.update();
-    button_r_raw.update();
-    button_left_raw.update();
-    button_right_raw.update();
-}
+
 void top_menu_left_on_pressed_changed(bool pressed, void* state) {
     if(!pressed) {
         size_t i = top_menu_index>0?top_menu_index-1:pip_boy_top_labels_size-1;
@@ -316,14 +311,10 @@ void sub_menu_right_on_pressed_changed(bool pressed, void* state) {
     }
 }
 void ui_pip_screen(uix::display& disp) {
-    button_l_raw.initialize();
-    button_l_raw.on_pressed_changed(top_menu_left_on_pressed_changed);
-    button_r_raw.initialize();
-    button_r_raw.on_pressed_changed(top_menu_right_on_pressed_changed);
-    button_left_raw.initialize();
-    button_left_raw.on_pressed_changed(sub_menu_left_on_pressed_changed);
-    button_right_raw.initialize();
-    button_right_raw.on_pressed_changed(sub_menu_right_on_pressed_changed);
+    button_l.on_pressed_changed(top_menu_left_on_pressed_changed);
+    button_r.on_pressed_changed(top_menu_right_on_pressed_changed);
+    button_left.on_pressed_changed(sub_menu_left_on_pressed_changed);
+    button_right.on_pressed_changed(sub_menu_right_on_pressed_changed);
     for(int i = 0;i<pip_boy_top_labels_size;++i) {
         pip_sub_menu_indices[i]=0;
     }

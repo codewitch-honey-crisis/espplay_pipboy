@@ -6,6 +6,7 @@
 #include <uix.hpp>
 
 #include "lcd_init.h"
+#include "input.hpp"
 #include "ui.hpp"
 using namespace gfx;
 using namespace uix;
@@ -72,10 +73,11 @@ void setup() {
     lcd_panel_init();
 #endif
     ui_title_screen(disp);
+    input_initialize();
     ui_pip_screen(disp);
 }
 
 void loop() {
-    ui_pip_update();
+    input_update();
     disp.update();
 }
