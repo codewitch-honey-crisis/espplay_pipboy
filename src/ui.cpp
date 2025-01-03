@@ -81,6 +81,7 @@ static constexpr const size_t pip_boy_top_labels_size = 5;
 static label_t pip_top_labels[pip_boy_top_labels_size];
 static int16_t pip_top_label_starts[pip_boy_top_labels_size];
 static int16_t pip_top_label_ends[pip_boy_top_labels_size];
+static size_t pip_sub_menu_indices[pip_boy_top_labels_size];
 static const char* pip_top_captions[] {
     "STAT",
     "INV",
@@ -191,6 +192,9 @@ static void sub_menu_painter_on_paint(painter_t::control_surface_type& destinati
         strcat(temp,"M");
         ti.text_sz(temp);
         ti.text_font->measure(-1,ti,&tsz);
+        if(x+tsz.width>LCD_WIDTH) {
+            break;
+        }
         ti.text_sz(last_txt);
         draw::text(destination,srect16(x,0,x+tsz.width,tsz.height-1),ti,vdark_green);
         ++c;
@@ -259,6 +263,7 @@ static void pip_sub_screen_set() {
 static void pip_set_sub_menu_index(size_t index) {
     if(index!=sub_menu_index) {
         sub_menu_index = index;
+        pip_sub_menu_indices[top_menu_index]=index;
         sub_menu_painter.invalidate();
     } else {
         return;
@@ -277,7 +282,7 @@ static void pip_set_top_menu_index(size_t index) {
         top_menu_painter.invalidate(sr);
     }
     sub_menu_index = (size_t)-1;
-    pip_set_sub_menu_index(0);
+    pip_set_sub_menu_index(pip_sub_menu_indices[top_menu_index]);
     
 }
 void ui_pip_update() {
@@ -319,6 +324,9 @@ void ui_pip_screen(uix::display& disp) {
     button_left_raw.on_pressed_changed(sub_menu_left_on_pressed_changed);
     button_right_raw.initialize();
     button_right_raw.on_pressed_changed(sub_menu_right_on_pressed_changed);
+    for(int i = 0;i<pip_boy_top_labels_size;++i) {
+        pip_sub_menu_indices[i]=0;
+    }
     pip_screen.dimensions({LCD_WIDTH,LCD_HEIGHT});
     pip_screen.background_color(color_t::black);
     disp.active_screen(pip_screen);
