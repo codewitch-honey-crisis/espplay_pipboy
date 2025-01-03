@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include "input.hpp"
-
+#define CHECK_BIT(bit,val) ((1<<bit)&val)
 using namespace arduino;
 static uint8_t gamepad_value=0;
 static bool gamepad_initialized = false;
@@ -38,7 +38,7 @@ void gamepad_button::deinitialize() {
 bool gamepad_button::pressed() {
     read_gamepad();
     uint8_t val = gamepad_value ;
-    bool pressed = ((1<<m_which)&val)==0;
+    bool pressed = CHECK_BIT(m_which,val)==0;
     return pressed;
 }
 void gamepad_button::update() {
