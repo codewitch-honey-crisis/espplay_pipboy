@@ -41,14 +41,14 @@ void lcd_buffers_init() {
     memset(lcd_transfer_buffer2, 0, lcd_transfer_buffer_size);
 #endif
 }
-
+#ifdef LCD_DMA
 static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io,
                             esp_lcd_panel_io_event_data_t *edata,
                             void *user_ctx) {
     disp.flush_complete();
     return true;
 }
-
+#endif
 void uix_on_flush(const rect16 &bounds, const void *bitmap, void *state) {
     lcd_panel_draw_bitmap(bounds.x1, bounds.y1, bounds.x2, bounds.y2,
                           (void *)bitmap);
@@ -66,7 +66,11 @@ void setup() {
     disp.buffer2(lcd_transfer_buffer2);
 #endif
     disp.on_flush_callback(uix_on_flush);
+#ifdef LCD_DMA
     lcd_panel_init(lcd_transfer_buffer_size, lcd_flush_ready);
+#else
+    lcd_panel_init();
+#endif
     ui_title_screen(disp);
     ui_pip_screen(disp);
 }
